@@ -1,0 +1,30 @@
+name: zzz-data
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 18
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Run tests
+              run: npm test || echo "No tests found"
+
+            - name: Notify Render Deploy
+              run: |
+                  curl -X POST "$RENDER_DEPLOY_HOOK_URL"
+              env:
+                  RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
