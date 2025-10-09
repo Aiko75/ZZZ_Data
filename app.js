@@ -4,7 +4,7 @@ const cors = require("cors");
 
 let zzzRoute;
 try {
-  zzzRoute = require("../ZZZ_BE/routes/index.route");
+  zzzRoute = require("./routes/index.route");
   console.log("✅ Đã load route thành công.");
 } catch (err) {
   console.error("❌ Lỗi khi load index.route:", err.message);
