@@ -2,7 +2,30 @@ const charModel = require("../models/char.model");
 
 exports.getCharacters = async (req, res) => {
   try {
-    const characters = await charModel.find();
+    const { _id } = req.query; // 🧩 Lấy param từ query ?_id=...
+    let characters;
+
+    if (_id) {
+      // 📌 Nếu có _id, tìm nhân vật theo ID
+      characters = await charModel.findById(_id);
+
+      if (!characters) {
+        return res.status(404).json({
+          success: false,
+          message: `❌ Không tìm thấy nhân vật có _id = ${_id}`,
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: `✅ Lấy nhân vật có _id = ${_id} thành công`,
+        data: characters,
+      });
+    }
+
+    // 📋 Nếu không có _id, trả về toàn bộ danh sách
+    characters = await charModel.find();
+
     res.status(200).json({
       success: true,
       count: characters.length,
@@ -10,6 +33,8 @@ exports.getCharacters = async (req, res) => {
       data: characters,
     });
   } catch (err) {
+    console.error("💥 Lỗi trong getCharacters:", err);
+
     res.status(500).json({
       success: false,
       message: "❌ Lỗi khi lấy danh sách nhân vật",
