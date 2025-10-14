@@ -15,8 +15,8 @@ connectDB();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// ✅ Bật CORS cho tất cả request
-app.use(cors());
+// // ✅ Bật CORS cho tất cả request
+// app.use(cors());
 
 // Nếu muốn chỉ cho phép frontend cụ thể (VD: localhost:5174)
 app.use(
