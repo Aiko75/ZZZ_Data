@@ -39,4 +39,4 @@ const zzzCharacter = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Character", zzzCharacter);
+module.exports = mongoose.model("character", zzzCharacter);
