@@ -1,6 +1,8 @@
 const express = require("express");
 const connectDB = require("./config/config");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 
 let zzzRoute;
 try {
@@ -9,11 +11,23 @@ try {
 } catch (err) {
   console.error("❌ Lỗi khi load index.route:", err.message);
 }
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "ZZZ API",
+      version: "1.0.0",
+      description: "API mô tả nhân vật trong ZZZ",
+    },
+  },
+  apis: ["./routes/*.js"], // chỉ đến nơi chứa các route
+};
 
 connectDB();
 
 const app = express();
 const port = process.env.PORT || 5000;
+const specs = swaggerJsdoc(options);
 
 // // ✅ Bật CORS cho tất cả request
 // app.use(cors());
@@ -36,6 +50,8 @@ app.use("/api/zzz", zzzRoute);
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to ZZZ API 🚀" });
 });
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 app.listen(port, () => {
   console.log(`🚀 Server đang chạy tại: http://localhost:${port}`);
